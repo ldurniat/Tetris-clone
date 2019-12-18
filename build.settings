@@ -1,0 +1,31 @@
+--
+-- For more information on build.settings, see the Project Build Settings guide:
+-- http://docs.coronalabs.com/guide/distribution/buildSettings/index.html
+--
+
+settings = {
+
+	-- Use the "orientation" table to set the default and supported device orientations
+	-- Acceptable values are "portrait", "portraitUpsideDown", "landscapeRight", or "landscapeLeft"
+	orientation = {
+		default = "landscapeRight",
+		supported = { "landscapeRight" }
+	},
+
+	android =
+	{
+		
+	},
+    
+
+	-- This setting can be used to turned on to disable debug symbol stripping altogether
+	build = {
+		--neverStripDebugInfo = true
+	},
+
+	plugins =
+	{
+
+	},
+
+}
