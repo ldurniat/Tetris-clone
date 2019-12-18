@@ -1,2 +1,2 @@
 # Tetris-clone
-a simple Android game crated using Corona SDK
+A simple Android game crated using Corona SDK
