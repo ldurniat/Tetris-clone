@@ -28,4 +28,4 @@ else
 end
 
 -- go to menu screen
-composer.gotoScene( "scene.menu", { params={ } } )
+composer.gotoScene( "game", { params={ } } )
