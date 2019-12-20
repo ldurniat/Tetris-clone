@@ -7,16 +7,51 @@ local scene = composer.newScene()
 ---------------------------------------------------------------------------------
  
 -- local forward references should go here
+
+local board = {
+   rows    = 22,
+   columns = 10,
+   side    = 50
+}
+board.offset_x = ( display.contentWidth - board.columns * board.side ) * 0.5
+board.offset_y = display.contentHeight - board.rows * board.side
+board.width    = board.columns * board.side
+board.height   = board.rows * board.side
  
 ---------------------------------------------------------------------------------
  
+local function drawBoard()
+
+   local sceneGroup = scene.view
+   local x1, y1, x2, y2
+   local hline
+   -- Draw horizontal lines
+   for i=0, board.rows do
+
+      x1, y1      = board.offset_x, board.offset_y + i * board.side
+      x2, y2      = board.offset_x + board.width, y1
+      hline       = display.newLine( sceneGroup, x1, y1, x2, y2 )
+      hline.width = 2
+
+   end   
+   -- Draw vertical lines
+   for i=0, board.columns do
+
+      x1, y1      = board.offset_x + i * board.side, board.offset_y 
+      x2, y2      = x1, board.offset_y + board.height
+      hline       = display.newLine( sceneGroup, x1, y1, x2, y2 )
+      hline.width = 2
+
+   end 
+
+end   
+
 -- "scene:create()"
 function scene:create( event )
- 
-   local sceneGroup = self.view
- 
    -- Initialize the scene here.
-   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+   -- Example: add display objects to "sceneGroup", add touch listeners, etc.  
+   
+   drawBoard()
 end
  
 -- "scene:show()"
