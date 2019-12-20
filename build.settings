@@ -8,8 +8,8 @@ settings = {
 	-- Use the "orientation" table to set the default and supported device orientations
 	-- Acceptable values are "portrait", "portraitUpsideDown", "landscapeRight", or "landscapeLeft"
 	orientation = {
-		default = "landscapeRight",
-		supported = { "landscapeRight" }
+		default = "portrait",
+		supported = { "portrait" }
 	},
 
 	android =
