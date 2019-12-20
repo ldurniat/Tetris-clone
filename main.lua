@@ -27,5 +27,15 @@ else
 	native.setProperty( "androidSystemUiVisibility", "immersiveSticky" ) 
 end
 
--- go to menu screen
+-- Constants
+_W  = display.contentWidth
+_H  = display.contentHeight
+_T  = display.screenOriginY
+_B  = display.viewableContentHeight - display.screenOriginY
+_L  = display.screenOriginX
+_R  = display.viewableContentWidth - display.screenOriginX
+_CX = display.contentCenterX
+_CY = display.contentCenterY
+
+-- Go to menu screen
 composer.gotoScene( "game", { params={ } } )
