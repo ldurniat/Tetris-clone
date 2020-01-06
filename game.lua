@@ -112,7 +112,6 @@ local function moveDownBlock( event )
          for j=1, block_size do
             if falling_block[i] and falling_block[i][j] then
 
-               print( i, j, falling_block.grid_y + i - 1,  falling_block.grid_x + j - 1 )
                if not board[falling_block.grid_y + i - 1] then board[falling_block.grid_y + i - 1] = {} end
 
                board[falling_block.grid_y + i - 1][falling_block.grid_x + j - 1] = falling_block[i][j]
