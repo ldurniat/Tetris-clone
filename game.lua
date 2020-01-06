@@ -43,7 +43,7 @@ local blocks_patterns = {
       { 0, 1, 0, 0 }
    },
 }
- 
+local createNewBlock 
 ---------------------------------------------------------------------------------
 
 local function canPlace( block )
@@ -107,10 +107,29 @@ local function moveDownBlock( event )
             end  
          end
       end  
+   elseif result == OFF_BOTTOM_EDGE_OF_BOARD then
+      for i=1, block_size do
+         for j=1, block_size do
+            if falling_block[i] and falling_block[i][j] then
+
+               print( i, j, falling_block.grid_y + i - 1,  falling_block.grid_x + j - 1 )
+               if not board[falling_block.grid_y + i - 1] then board[falling_block.grid_y + i - 1] = {} end
+
+               board[falling_block.grid_y + i - 1][falling_block.grid_x + j - 1] = falling_block[i][j]
+               falling_block[i][j] = nil
+
+            end
+         end
+      end
+
+      timer.cancel( falling_block.timer )
+
+      createNewBlock()
+
    end   
 end   
 
-local function createNewBlock()
+function createNewBlock()
 
    local new_block = { grid_x = 4, grid_y = 1 }
    local index = math.random( #blocks_patterns )
