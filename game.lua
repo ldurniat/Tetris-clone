@@ -78,8 +78,8 @@ local function canPlace( block )
             if block.grid_x - 1 + j < 1 then return OFF_BOARD end
             if block.grid_x - 1 + j > board.columns then return OFF_BOARD end
             if block.grid_y - 1 + i > board.rows then return OFF_BOTTOM_EDGE_OF_BOARD end
-            if board[block.grid_x + j - 1] and 
-               board[block.grid_x + j - 1][block.grid_y + i - 1] then return OVERLAP_BLOCKS end
+            if board[block.grid_y + j - 1] and 
+               board[block.grid_y + j - 1][block.grid_x + i - 1] then return OVERLAP_BLOCKS end
          end   
       end
    end  
@@ -112,6 +112,7 @@ local function moveDownBlock( event )
    block.grid_y = falling_block.grid_y + 1
 
    local result = canPlace( block )
+   print( result )
 
    if result == ALLOWED_MOVE then
 
