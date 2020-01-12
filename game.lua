@@ -46,6 +46,28 @@ local blocks_patterns = {
 local createNewBlock 
 ---------------------------------------------------------------------------------
 
+local function touch( event )
+   local phase = event.phase
+
+   if phase == "moved" then
+      local distance_x = event.x - event.xStart
+      local distance_y = event.y - event.yStart
+
+      if distance_x > 50 then
+         print( 'swipe in right' )
+         
+      elseif  distance_x < -50  then
+         print( 'swipe in left' )
+
+      elseif  distance_y > 50  then  
+         print( 'swipe in down' )  
+            
+      end
+   end
+
+   return true
+end
+
 local function canPlace( block )
 
    local block_size = block.grid_size
@@ -203,6 +225,8 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
       createNewBlock()
+
+      Runtime:addEventListener( "touch", touch )
    end
 end
  
@@ -218,6 +242,8 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
+
+      Runtime:removeEventListener( "touch", touch )
    end
 end
  
