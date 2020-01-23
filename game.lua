@@ -88,6 +88,44 @@ local function canPlace( block )
 
 end   
 
+local function removeLines()
+
+    for i=1, board.rows do
+        local need_move_down_row = true
+        for j=1, board.columns do
+            if  not board[i] or not board[i][j] then
+                need_move_down_row = false 
+                break
+            end
+        end  
+
+        if need_move_down_row then
+            for j=1, board.columns do
+                local rect = board[i][j]
+                if rect then
+                    display.remove( rect )
+                    board[i][j] = nil
+                end    
+            end   
+
+            for j=1, board.columns do 
+                for k=i-1, 1, -1 do 
+                    if board[k] then
+                        local rect_to_move = board[k][j]
+                        if rect_to_move then
+                            board[k + 1][j] = rect_to_move
+                            board[k][j] = nil
+                            rect_to_move.y = rect_to_move.y + board.side
+                        end    
+                    end    
+                end
+            end  
+        end    
+    end
+
+    createNewBlock()   
+end
+
 local function moveDownBlock( event )
 
     local params = event.source.params
@@ -145,8 +183,7 @@ local function moveDownBlock( event )
 
         timer.cancel( falling_block.timer )
 
-        createNewBlock()
-
+        removeLines()
     end   
 end   
 
@@ -208,6 +245,18 @@ end
 function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.  
+
+    --[[
+    board[22] = {}
+
+    for i=1, board.columns do
+        local x = board.offset_x + ( i - 1 ) * board.side  
+        local y = board.offset_y + 21 * board.side  
+        board[22][i] = display.newRect( scene.view, x, y, board.side, board.side )
+        board[22][i].anchorX = 0
+        board[22][i].anchorY = 0
+    end
+    --]]
 
     drawBoard()
 end
