@@ -44,25 +44,33 @@ local blocks_patterns = {
    },
 }
 local createNewBlock 
+local was_swipe_done = false
 ---------------------------------------------------------------------------------
 
 local function touch( event )
     local phase = event.phase
 
     if phase == "moved" then
-        local distance_x = event.x - event.xStart
-        local distance_y = event.y - event.yStart
+        if not was_swipe_done then
+            local distance_x = event.x - event.xStart
+            local distance_y = event.y - event.yStart
 
-        if distance_x > 50 then
-            print( 'swipe in right' )
-         
-        elseif  distance_x < -50  then
-            print( 'swipe in left' )
+            if distance_x > 50 then
+                was_swipe_done = true
+                print( 'swipe in right' )
+             
+            elseif  distance_x < -50  then
+                was_swipe_done = true
+                print( 'swipe in left' )
 
-        elseif  distance_y > 50  then  
-            print( 'swipe in down' )  
-            
+            elseif  distance_y > 50  then
+                was_swipe_done = true  
+                print( 'swipe in down' )  
+                
+            end
         end
+    elseif phase == "ended" or phase == "cancelled" then
+        was_swipe_done = false        
     end
 
     return true
