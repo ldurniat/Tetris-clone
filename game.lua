@@ -111,6 +111,50 @@ local function moveBlockInLeft()
     end    
 end        
 
+local function moveBlockInRight()
+    if new_block then
+        local falling_block  = new_block
+        local block = {}
+        local block_size = falling_block.grid_size
+
+        block.grid_size = block_size
+
+        for i=1, block_size do
+            for j=1, block_size do
+                if falling_block[i] and falling_block[i][j] then
+                    if not block[i] then block[i] = {} end
+
+                    block[i][j] = 1
+
+                end   
+            end
+        end 
+
+        block.grid_x = falling_block.grid_x + 1
+        block.grid_y = falling_block.grid_y 
+
+        local result = canPlace( block )
+
+        if result == ALLOWED_MOVE then
+
+            falling_block.grid_x = falling_block.grid_x + 1 
+
+            for i=1, block_size do
+                for j=1, block_size do
+                    if falling_block[i] and falling_block[i][j] then
+                        local rect = falling_block[i][j]
+                        if  rect then
+
+                            rect.x = rect.x + board.side
+
+                        end   
+                    end  
+                end
+            end
+        end
+    end    
+end        
+
 local function touch( event )
     local phase = event.phase
 
@@ -121,6 +165,7 @@ local function touch( event )
 
             if distance_x > 50 then
                 was_swipe_done = true
+                moveBlockInRight()
                 print( 'swipe in right' )
              
             elseif  distance_x < -50  then
