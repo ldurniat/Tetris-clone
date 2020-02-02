@@ -45,79 +45,8 @@ local blocks_patterns = {
 }
 local createNewBlock 
 local was_swipe_done = false
+local new_block
 ---------------------------------------------------------------------------------
-
-local function moveBlockInLeft()
-    local falling_block  = new_block
-    local block = {}
-    local block_size = falling_block.grid_size
-
-    block.grid_size = block_size
-
-    for i=1, block_size do
-        for j=1, block_size do
-            if falling_block[i] and falling_block[i][j] then
-                if not block[i] then block[i] = {} end
-
-                block[i][j] = 1
-
-            end   
-        end
-    end 
-
-    block.grid_x = falling_block.grid_x - 1
-    block.grid_y = falling_block.grid_y 
-
-    local result = canPlace( block )
-
-    if result == ALLOWED_MOVE then
-
-        falling_block.grid_x = falling_block.grid_x - 1 
-
-        for i=1, block_size do
-            for j=1, block_size do
-                if falling_block[i] and falling_block[i][j] then
-                    local rect = falling_block[i][j]
-                    if  rect then
-
-                        rect.x = rect.x - board.side
-
-                    end   
-                end  
-            end
-        end
-    end
-end        
-
-local function touch( event )
-    local phase = event.phase
-
-    if phase == "moved" then
-        if not was_swipe_done then
-            local distance_x = event.x - event.xStart
-            local distance_y = event.y - event.yStart
-
-            if distance_x > 50 then
-                was_swipe_done = true
-                print( 'swipe in right' )
-             
-            elseif  distance_x < -50  then
-                was_swipe_done = true
-                print( 'swipe in left' )
-
-            elseif  distance_y > 50  then
-                was_swipe_done = true  
-                print( 'swipe in down' )  
-                
-            end
-        end
-    elseif phase == "ended" or phase == "cancelled" then
-        was_swipe_done = false        
-    end
-
-    return true
-end
-
 local function canPlace( block )
 
     local block_size = block.grid_size
@@ -137,6 +66,80 @@ local function canPlace( block )
     return ALLOWED_MOVE
 
 end   
+
+local function moveBlockInLeft()
+    if new_block then
+        local falling_block  = new_block
+        local block = {}
+        local block_size = falling_block.grid_size
+
+        block.grid_size = block_size
+
+        for i=1, block_size do
+            for j=1, block_size do
+                if falling_block[i] and falling_block[i][j] then
+                    if not block[i] then block[i] = {} end
+
+                    block[i][j] = 1
+
+                end   
+            end
+        end 
+
+        block.grid_x = falling_block.grid_x - 1
+        block.grid_y = falling_block.grid_y 
+
+        local result = canPlace( block )
+
+        if result == ALLOWED_MOVE then
+
+            falling_block.grid_x = falling_block.grid_x - 1 
+
+            for i=1, block_size do
+                for j=1, block_size do
+                    if falling_block[i] and falling_block[i][j] then
+                        local rect = falling_block[i][j]
+                        if  rect then
+
+                            rect.x = rect.x - board.side
+
+                        end   
+                    end  
+                end
+            end
+        end
+    end    
+end        
+
+local function touch( event )
+    local phase = event.phase
+
+    if phase == "moved" then
+        if not was_swipe_done then
+            local distance_x = event.x - event.xStart
+            local distance_y = event.y - event.yStart
+
+            if distance_x > 50 then
+                was_swipe_done = true
+                print( 'swipe in right' )
+             
+            elseif  distance_x < -50  then
+                was_swipe_done = true
+                moveBlockInLeft()
+                print( 'swipe in left' )
+
+            elseif  distance_y > 50  then
+                was_swipe_done = true  
+                print( 'swipe in down' )  
+                
+            end
+        end
+    elseif phase == "ended" or phase == "cancelled" then
+        was_swipe_done = false        
+    end
+
+    return true
+end
 
 local function removeLines()
 
@@ -239,7 +242,7 @@ end
 
 function createNewBlock()
 
-    local new_block = { grid_x = 4, grid_y = 1 }
+    new_block = { grid_x = 4, grid_y = 1 }
     local index = math.random( #blocks_patterns )
     local pattern = blocks_patterns[ index ]
 
