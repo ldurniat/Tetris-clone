@@ -65,7 +65,57 @@ local function canPlace( block )
 
     return ALLOWED_MOVE
 
-end   
+end  
+
+local function moveDownAsMuchAsPossible()
+    if new_block then
+        local falling_block  = new_block
+        local block = {}
+        local block_size = falling_block.grid_size
+
+        block.grid_size = block_size
+
+        for i=1, block_size do
+            for j=1, block_size do
+                if falling_block[i] and falling_block[i][j] then
+                    if not block[i] then block[i] = {} end
+
+                    block[i][j] = 1
+
+                end   
+            end
+        end 
+
+        local max_units_move_block_down = 0
+
+        for i=1, 22 do
+            max_units_move_block_down = max_units_move_block_down + 1
+
+            block.grid_x = falling_block.grid_x 
+            block.grid_y = falling_block.grid_y + max_units_move_block_down
+
+            local result = canPlace( block )
+
+            if result ~= ALLOWED_MOVE then break end
+        end        
+
+        falling_block.grid_y = falling_block.grid_y + max_units_move_block_down - 1 
+
+        for i=1, block_size do
+            for j=1, block_size do
+                if falling_block[i] and falling_block[i][j] then
+                    local rect = falling_block[i][j]
+                    if  rect then
+
+                        rect.y = rect.y + ( max_units_move_block_down - 1 )* board.side
+
+                    end   
+                end  
+            end
+        end
+  
+    end    
+end         
 
 local function moveBlockInLeft()
     if new_block then
@@ -175,6 +225,7 @@ local function touch( event )
 
             elseif  distance_y > 50  then
                 was_swipe_done = true  
+                moveDownAsMuchAsPossible()
                 print( 'swipe in down' )  
                 
             end
