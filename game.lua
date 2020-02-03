@@ -48,7 +48,6 @@ local was_swipe_done = false
 local new_block
 ---------------------------------------------------------------------------------
 local function canPlace( block )
-
     local block_size = block.grid_size
 
     for i=1, block_size do
@@ -347,7 +346,7 @@ function createNewBlock()
             if pattern[i][j] == 1 then
                 if not new_block[i] then new_block[i] = {} end
 
-                local x = board.offset_x + ( j - 1 + new_block.grid_x ) * board.side  
+                local x = board.offset_x + ( j - 2 + new_block.grid_x ) * board.side  
                 local y = board.offset_y + ( i - 1 ) * board.side  
                 new_block[i][j] = display.newRect( scene.view, x, y, board.side, board.side )
                 new_block[i][j].anchorX = 0
