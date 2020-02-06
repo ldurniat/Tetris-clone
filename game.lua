@@ -107,7 +107,7 @@ local function rotateBlock()
                 end
             end
 
-            falling_block = block
+            new_block = block
         end
     end    
 end         
@@ -326,20 +326,19 @@ end
 
 local function moveDownBlock( event )
 
-    local params = event.source.params
-    local falling_block  = params.block
+    local falling_block  = new_block
     local block = {}
     local block_size = falling_block.grid_size
 
     block.grid_size = block_size
-
+    
     for i=1, block_size do
         for j=1, block_size do
             if falling_block[i] and falling_block[i][j] then
                 if not block[i] then block[i] = {} end
 
                 block[i][j] = 1
-
+                
             end   
         end
     end 
@@ -388,7 +387,7 @@ end
 function createNewBlock()
 
     new_block = { grid_x = 4, grid_y = 1 }
-    local index = math.random( #blocks_patterns )
+    local index = 5 -- math.random( #blocks_patterns )
     local pattern = blocks_patterns[ index ]
 
     for j=1, #pattern do
@@ -408,8 +407,7 @@ function createNewBlock()
 
     new_block.grid_size = #pattern
 
-    new_block.timer = timer.performWithDelay( 300, moveDownBlock, -1 )
-    new_block.timer.params = { block = new_block }     
+    new_block.timer = timer.performWithDelay( 300, moveDownBlock, -1 )    
 
 end
  
