@@ -387,7 +387,7 @@ end
 function createNewBlock()
 
     new_block = { grid_x = 4, grid_y = 1 }
-    local index = 5 -- math.random( #blocks_patterns )
+    local index = math.random( #blocks_patterns )
     local pattern = blocks_patterns[ index ]
 
     for j=1, #pattern do
