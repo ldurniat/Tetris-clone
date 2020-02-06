@@ -5,6 +5,8 @@ local scene = composer.newScene()
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
+
+system.setTapDelay( 0.02 )
  
 -- local forward references should go here
 
@@ -64,7 +66,51 @@ local function canPlace( block )
 
     return ALLOWED_MOVE
 
-end  
+end 
+
+local function rotateBlock()
+    if new_block then
+        local falling_block  = new_block
+        local block = {}
+        local block_size = falling_block.grid_size
+
+        block.grid_size = block_size
+        block.grid_x = falling_block.grid_x
+        block.grid_y = falling_block.grid_y
+
+        for i=1, block_size do
+            for j=1, block_size do
+                if falling_block[block_size + 1 - i] and falling_block[block_size + 1 - i][j] then
+                    if not block[j] then block[j] = {} end
+
+                    block[j][i] = 1
+
+                end   
+            end
+        end 
+
+        local result = canPlace( block )
+
+        if result == ALLOWED_MOVE then
+
+            block.timer = falling_block.timer
+
+            for i=1, block_size do
+                for j=1, block_size do
+                    if falling_block[block_size + 1 - i] and falling_block[block_size + 1 - i][j] then
+
+                        block[j][i] = falling_block[block_size + 1 - i][j]
+                        block[j][i].x = board.offset_x + ( i - 2 + block.grid_x ) * board.side  
+                        block[j][i].y = board.offset_y + ( j - 2 + block.grid_y ) * board.side  
+
+                    end 
+                end
+            end
+
+            falling_block = block
+        end
+    end    
+end         
 
 local function moveDownAsMuchAsPossible()
     if new_block then
@@ -204,6 +250,11 @@ local function moveBlockInRight()
     end    
 end        
 
+local function tap( event )
+    rotateBlock() 
+    return true
+end    
+
 local function touch( event )
     local phase = event.phase
 
@@ -225,8 +276,7 @@ local function touch( event )
             elseif  distance_y > 50  then
                 was_swipe_done = true  
                 moveDownAsMuchAsPossible()
-                print( 'swipe in down' )  
-                
+                print( 'swipe in down' )    
             end
         end
     elseif phase == "ended" or phase == "cancelled" then
@@ -424,6 +474,7 @@ function scene:show( event )
         createNewBlock()
 
         Runtime:addEventListener( "touch", touch )
+        Runtime:addEventListener( "tap", tap )
     end
 end
  
@@ -441,6 +492,7 @@ function scene:hide( event )
       -- Called immediately after scene goes off screen.
 
         Runtime:removeEventListener( "touch", touch )
+        Runtime:removeEventListener( "tap", tap )
     end
 end
  
