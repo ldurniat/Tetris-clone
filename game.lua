@@ -360,6 +360,8 @@ local function moveDownBlock( event )
 
                         rect.y = rect.y + board.side
 
+                        if falling_block.grid_y + i - 1 > 0 then rect.isVisible = true end
+
                     end   
                 end  
             end
@@ -400,6 +402,7 @@ function createNewBlock()
                 new_block[i][j] = display.newRect( scene.view, x, y, board.side, board.side )
                 new_block[i][j].anchorX = 0
                 new_block[i][j].anchorY = 0
+                new_block[i][j].isVisible = false
 
             end   
         end
