@@ -153,6 +153,7 @@ local function moveDownAsMuchAsPossible()
                     if  rect then
 
                         rect.y = rect.y + ( max_units_move_block_down - 1 )* board.side
+                        rect.isVisible = true
 
                     end   
                 end  
