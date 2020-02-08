@@ -386,9 +386,9 @@ end
 
 function createNewBlock()
 
-    new_block = { grid_x = 4, grid_y = 1 }
     local index = math.random( #blocks_patterns )
     local pattern = blocks_patterns[ index ]
+    new_block = { grid_x = 4, grid_y = 1 - #pattern }
 
     for j=1, #pattern do
         for i=1, #pattern do
@@ -396,7 +396,7 @@ function createNewBlock()
                 if not new_block[i] then new_block[i] = {} end
 
                 local x = board.offset_x + ( j - 2 + new_block.grid_x ) * board.side  
-                local y = board.offset_y + ( i - 1 ) * board.side  
+                local y = board.offset_y + ( i - 2 + new_block.grid_y ) * board.side  
                 new_block[i][j] = display.newRect( scene.view, x, y, board.side, board.side )
                 new_block[i][j].anchorX = 0
                 new_block[i][j].anchorY = 0
